@@ -1,11 +1,11 @@
-# Emailer Library
+# Mailweaver
 
-[![npm version](https://img.shields.io/npm/v/@devboidesigns/emailer-library.svg?color=1d9bf0)](https://www.npmjs.com/package/@devboidesigns/emailer-library)
+[![npm version](https://img.shields.io/npm/v/mailweaver.svg?color=1d9bf0)](https://www.npmjs.com/package/mailweaver)
 [![License: ISC](https://img.shields.io/badge/license-ISC-00b894.svg)](https://opensource.org/license/isc-license-txt)
-[![GitHub stars](https://img.shields.io/github/stars/DevboiDesigns/emailer-library?style=social)](https://github.com/DevboiDesigns/emailer-library)
+[![GitHub stars](https://img.shields.io/github/stars/DevboiDesigns/mailweaver?style=social)](https://github.com/DevboiDesigns/mailweaver)
 
 ```txt
-✉️  emailer-library
+✉️  mailweaver
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
   sendgrid v3, but:
    • typed
@@ -18,7 +18,7 @@ A reusable TypeScript library for sending emails via the SendGrid v3 API. Includ
 ## Installation
 
 ```bash
-npm install @devboidesigns/emailer-library
+npm install mailweaver
 ```
 
 **Requirements:** Node.js 18+ (uses native `fetch`)
@@ -26,7 +26,7 @@ npm install @devboidesigns/emailer-library
 ## Quick Start
 
 ```typescript
-import { SendGridClient } from "@devboidesigns/emailer-library";
+import { SendGridClient } from "mailweaver";
 
 const client = new SendGridClient({ apiKey: process.env.SENDGRID_API_KEY! });
 await client.send({
@@ -43,7 +43,7 @@ await client.send({
 Create a SendGrid API key from the [SendGrid dashboard](https://app.sendgrid.com/settings/api_keys) and pass it to the client:
 
 ```typescript
-import { SendGridClient, createConsoleLogger } from "@devboidesigns/emailer-library";
+import { SendGridClient, createConsoleLogger } from "mailweaver";
 
 // From environment variable (recommended)
 const client = new SendGridClient({ apiKey: process.env.SENDGRID_API_KEY! });
@@ -223,7 +223,7 @@ The library uses typed errors with error codes for programmatic handling. All er
 Thrown before the request is sent:
 
 ```typescript
-import { SendGridClient, ValidationError } from "@devboidesigns/emailer-library";
+import { SendGridClient, ValidationError } from "mailweaver";
 
 try {
   await client.send({
@@ -244,7 +244,7 @@ try {
 Thrown when the SendGrid API returns an error. Use `isRetryable()` and `getRetryAfterMs()` for retry logic:
 
 ```typescript
-import { SendGridClient, SendGridError } from "@devboidesigns/emailer-library";
+import { SendGridClient, SendGridError } from "mailweaver";
 
 try {
   await client.send(options);
@@ -291,7 +291,7 @@ Pass a `logger` to enable structured, PII-safe logging. Logs are JSON-formatted 
 ### Built-in console logger
 
 ```typescript
-import { SendGridClient, createConsoleLogger } from "@devboidesigns/emailer-library";
+import { SendGridClient, createConsoleLogger } from "mailweaver";
 
 const client = new SendGridClient({
   apiKey: process.env.SENDGRID_API_KEY!,
@@ -307,7 +307,7 @@ const client = new SendGridClient({
 Implement the `Logger` interface to integrate with pino, winston, or your logging infrastructure:
 
 ```typescript
-import type { Logger, LogContext } from "@devboidesigns/emailer-library";
+import type { Logger, LogContext } from "mailweaver";
 
 const myLogger: Logger = {
   debug: (msg, ctx) => log.debug(ctx, msg),
@@ -409,7 +409,7 @@ Sends an email. Returns `{ statusCode, headers, rateLimit? }` on success.
 
 If this library saves you time or helps you ship more reliable email flows:
 
-- **Star the repo** on GitHub: [`DevboiDesigns/emailer-library`](https://github.com/DevboiDesigns/emailer-library)
+- **Star the repo** on GitHub: [`DevboiDesigns/mailweaver`](https://github.com/DevboiDesigns/mailweaver)
 - **Share feedback or ideas** via issues – real-world use cases help shape the API
 - **Tell a friend or teammate** who is tired of hand-rolling SendGrid calls
 

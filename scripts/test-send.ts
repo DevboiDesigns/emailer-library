@@ -2,8 +2,7 @@
  * Test script to send a real email via SendGrid.
  *
  * Usage:
- *   npm run test:send -- user@example.com
- *   SENDGRID_FROM_EMAIL=noreply@example.com npm run test:send -- user@example.com
+ *   SENDGRID_API_KEY=your_key SENDGRID_FROM_EMAIL=noreply@example.com npm run test:send -- user@example.com
  *
  * Required env vars:
  *   SENDGRID_API_KEY  - Your SendGrid API key
@@ -45,9 +44,9 @@ async function main() {
     const result = await client.send({
       to: toEmail,
       from: fromEmail!,
-      subject: "Emailer Library – Test Email",
-      text: "This is a test email from the emailer-library. If you received this, your SendGrid setup is working correctly.",
-      html: "<p>This is a test email from the <strong>emailer-library</strong>.</p><p>If you received this, your SendGrid setup is working correctly.</p>",
+      subject: "Mailweaver – Test Email",
+      text: "This is a test email from mailweaver. If you received this, your SendGrid setup is working correctly.",
+      html: "<p>This is a test email from <strong>mailweaver</strong>.</p><p>If you received this, your SendGrid setup is working correctly.</p>",
     });
 
     console.log(`✓ Email sent successfully (status: ${result.statusCode})`);

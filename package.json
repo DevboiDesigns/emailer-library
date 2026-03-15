@@ -21,6 +21,7 @@
     "build": "tsup",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "test:send": "ts-node scripts/test-send.ts",
     "release": "npm run build && npm publish"
   },
   "engines": {

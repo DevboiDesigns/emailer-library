@@ -204,17 +204,19 @@ export async function sendMail(
   const message =
     errorMessages || `SendGrid API error: ${response.status} ${response.statusText}`;
 
-  log.error("SendGrid API error", {
-    statusCode: response.status,
-    errorSummary: errors.map((e) => e.message).join("; "),
-    rateLimitRemaining: rateLimit?.remaining,
-    isRetryable: response.status === 429 || (response.status >= 500 && response.status < 600),
-  });
-
-  throw new SendGridError(
+  const sendGridError = new SendGridError(
     message,
     response.status,
     errors,
     rateLimit
   );
+
+  log.error("SendGrid API error", {
+    statusCode: response.status,
+    errorSummary: errors.map((e) => e.message).join("; "),
+    rateLimitRemaining: rateLimit?.remaining,
+    isRetryable: sendGridError.isRetryable(),
+  });
+
+  throw sendGridError;
 }

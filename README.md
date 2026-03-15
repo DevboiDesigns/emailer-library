@@ -1,5 +1,18 @@
 # Emailer Library
 
+[![npm version](https://img.shields.io/npm/v/@devboidesigns/emailer-library.svg?color=1d9bf0)](https://www.npmjs.com/package/@devboidesigns/emailer-library)
+[![License: ISC](https://img.shields.io/badge/license-ISC-00b894.svg)](https://opensource.org/license/isc-license-txt)
+[![GitHub stars](https://img.shields.io/github/stars/DevboiDesigns/emailer-library?style=social)](https://github.com/DevboiDesigns/emailer-library)
+
+```txt
+✉️  emailer-library
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+  sendgrid v3, but:
+   • typed
+   • validated
+   • production-safe
+```
+
 A reusable TypeScript library for sending emails via the SendGrid v3 API. Includes input validation against SendGrid limits, full type safety, production-grade error handling, and structured logging.
 
 ## Installation
@@ -62,6 +75,16 @@ Required environment variables:
 | `SENDGRID_FROM_EMAIL` | A verified sender address from your SendGrid account |
 
 The `--` passes the recipient email to the script. You can also load env vars from `.env.local` or similar if your tooling supports it.
+
+### Integration tests against SendGrid
+
+This repo includes an optional integration test suite that can hit the real SendGrid API in sandbox mode:
+
+```bash
+SENDGRID_API_KEY=your_key SENDGRID_FROM_EMAIL=noreply@yourdomain.com npm test -- tests/integration.test.ts
+```
+
+By default, when `SENDGRID_API_KEY` is not set, the integration tests are skipped and only fast unit tests run. Use this sparingly in CI to avoid rate limits.
 
 ## Basic Usage
 
@@ -381,6 +404,16 @@ Sends an email. Returns `{ statusCode, headers, rateLimit? }` on success.
 - `Attachment` – `{ content: string; filename: string; type?: string; disposition?: "inline" | "attachment"; content_id?: string }`
 - `SendResponse` – `{ statusCode: number; headers: Record<string, string>; rateLimit?: RateLimitInfo }`
 - `Logger` – `{ debug, info, warn, error, child? }`
+
+## Show some love 💙
+
+If this library saves you time or helps you ship more reliable email flows:
+
+- **Star the repo** on GitHub: [`DevboiDesigns/emailer-library`](https://github.com/DevboiDesigns/emailer-library)
+- **Share feedback or ideas** via issues – real-world use cases help shape the API
+- **Tell a friend or teammate** who is tired of hand-rolling SendGrid calls
+
+Every star and suggestion genuinely helps keep this project healthy and evolving.
 
 ## License
 

@@ -1,11 +1,11 @@
-# Emailer Library
+# Mailweaver
 
-[![npm version](https://img.shields.io/npm/v/omnimailer.svg?color=1d9bf0)](https://www.npmjs.com/package/omnimailer)
+[![npm version](https://img.shields.io/npm/v/mailweaver.svg?color=1d9bf0)](https://www.npmjs.com/package/mailweaver)
 [![License: ISC](https://img.shields.io/badge/license-ISC-00b894.svg)](https://opensource.org/license/isc-license-txt)
-[![GitHub stars](https://img.shields.io/github/stars/DevboiDesigns/emailer-library?style=social)](https://github.com/DevboiDesigns/emailer-library)
+[![GitHub stars](https://img.shields.io/github/stars/DevboiDesigns/mailweaver?style=social)](https://github.com/DevboiDesigns/mailweaver)
 
 ```txt
-✉️  emailer-library
+✉️  mailweaver
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
   sendgrid v3, but:
    • typed
@@ -18,7 +18,7 @@ A reusable TypeScript library for sending emails via the SendGrid v3 API. Includ
 ## Installation
 
 ```bash
-npm install omnimailer
+npm install mailweaver
 ```
 
 **Requirements:** Node.js 18+ (uses native `fetch`)
@@ -26,7 +26,7 @@ npm install omnimailer
 ## Quick Start
 
 ```typescript
-import { SendGridClient } from "omnimailer";
+import { SendGridClient } from "mailweaver";
 
 const client = new SendGridClient({ apiKey: process.env.SENDGRID_API_KEY! });
 await client.send({
@@ -409,7 +409,7 @@ Sends an email. Returns `{ statusCode, headers, rateLimit? }` on success.
 
 If this library saves you time or helps you ship more reliable email flows:
 
-- **Star the repo** on GitHub: [`DevboiDesigns/emailer-library`](https://github.com/DevboiDesigns/emailer-library)
+- **Star the repo** on GitHub: [`DevboiDesigns/mailweaver`](https://github.com/DevboiDesigns/mailweaver)
 - **Share feedback or ideas** via issues – real-world use cases help shape the API
 - **Tell a friend or teammate** who is tired of hand-rolling SendGrid calls
 

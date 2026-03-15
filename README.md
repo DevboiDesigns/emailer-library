@@ -1,11 +1,24 @@
-# Emailer Library
+# Mailweaver
+
+[![npm version](https://img.shields.io/npm/v/mailweaver.svg?color=1d9bf0)](https://www.npmjs.com/package/mailweaver)
+[![License: ISC](https://img.shields.io/badge/license-ISC-00b894.svg)](https://opensource.org/license/isc-license-txt)
+[![GitHub stars](https://img.shields.io/github/stars/DevboiDesigns/mailweaver?style=social)](https://github.com/DevboiDesigns/mailweaver)
+
+```txt
+✉️  mailweaver
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+  sendgrid v3, but:
+   • typed
+   • validated
+   • production-safe
+```
 
 A reusable TypeScript library for sending emails via the SendGrid v3 API. Includes input validation against SendGrid limits, full type safety, production-grade error handling, and structured logging.
 
 ## Installation
 
 ```bash
-npm install @devboidesigns/emailer-library
+npm install mailweaver
 ```
 
 **Requirements:** Node.js 18+ (uses native `fetch`)
@@ -13,7 +26,7 @@ npm install @devboidesigns/emailer-library
 ## Quick Start
 
 ```typescript
-import { SendGridClient } from "@devboidesigns/emailer-library";
+import { SendGridClient } from "mailweaver";
 
 const client = new SendGridClient({ apiKey: process.env.SENDGRID_API_KEY! });
 await client.send({
@@ -30,7 +43,7 @@ await client.send({
 Create a SendGrid API key from the [SendGrid dashboard](https://app.sendgrid.com/settings/api_keys) and pass it to the client:
 
 ```typescript
-import { SendGridClient, createConsoleLogger } from "@devboidesigns/emailer-library";
+import { SendGridClient, createConsoleLogger } from "mailweaver";
 
 // From environment variable (recommended)
 const client = new SendGridClient({ apiKey: process.env.SENDGRID_API_KEY! });
@@ -45,6 +58,33 @@ const clientWithOptions = new SendGridClient({
 ```
 
 Ensure your `from` address is a [verified sender](https://docs.sendgrid.com/ui/sending-email/sender-verification) in your SendGrid account.
+
+### Test send (development)
+
+When developing or cloning the repo, you can verify your SendGrid setup by sending a real test email:
+
+```bash
+SENDGRID_API_KEY=your_key SENDGRID_FROM_EMAIL=noreply@yourdomain.com npm run test:send -- recipient@example.com
+```
+
+Required environment variables:
+
+| Variable | Description |
+|----------|-------------|
+| `SENDGRID_API_KEY` | Your SendGrid API key |
+| `SENDGRID_FROM_EMAIL` | A verified sender address from your SendGrid account |
+
+The `--` passes the recipient email to the script. You can also load env vars from `.env.local` or similar if your tooling supports it.
+
+### Integration tests against SendGrid
+
+This repo includes an optional integration test suite that can hit the real SendGrid API in sandbox mode:
+
+```bash
+SENDGRID_API_KEY=your_key SENDGRID_FROM_EMAIL=noreply@yourdomain.com npm test -- tests/integration.test.ts
+```
+
+By default, when `SENDGRID_API_KEY` is not set, the integration tests are skipped and only fast unit tests run. Use this sparingly in CI to avoid rate limits.
 
 ## Basic Usage
 
@@ -183,7 +223,7 @@ The library uses typed errors with error codes for programmatic handling. All er
 Thrown before the request is sent:
 
 ```typescript
-import { SendGridClient, ValidationError } from "@devboidesigns/emailer-library";
+import { SendGridClient, ValidationError } from "mailweaver";
 
 try {
   await client.send({
@@ -204,7 +244,7 @@ try {
 Thrown when the SendGrid API returns an error. Use `isRetryable()` and `getRetryAfterMs()` for retry logic:
 
 ```typescript
-import { SendGridClient, SendGridError } from "@devboidesigns/emailer-library";
+import { SendGridClient, SendGridError } from "mailweaver";
 
 try {
   await client.send(options);
@@ -251,7 +291,7 @@ Pass a `logger` to enable structured, PII-safe logging. Logs are JSON-formatted 
 ### Built-in console logger
 
 ```typescript
-import { SendGridClient, createConsoleLogger } from "@devboidesigns/emailer-library";
+import { SendGridClient, createConsoleLogger } from "mailweaver";
 
 const client = new SendGridClient({
   apiKey: process.env.SENDGRID_API_KEY!,
@@ -267,7 +307,7 @@ const client = new SendGridClient({
 Implement the `Logger` interface to integrate with pino, winston, or your logging infrastructure:
 
 ```typescript
-import type { Logger, LogContext } from "@devboidesigns/emailer-library";
+import type { Logger, LogContext } from "mailweaver";
 
 const myLogger: Logger = {
   debug: (msg, ctx) => log.debug(ctx, msg),
@@ -364,6 +404,16 @@ Sends an email. Returns `{ statusCode, headers, rateLimit? }` on success.
 - `Attachment` – `{ content: string; filename: string; type?: string; disposition?: "inline" | "attachment"; content_id?: string }`
 - `SendResponse` – `{ statusCode: number; headers: Record<string, string>; rateLimit?: RateLimitInfo }`
 - `Logger` – `{ debug, info, warn, error, child? }`
+
+## Show some love 💙
+
+If this library saves you time or helps you ship more reliable email flows:
+
+- **Star the repo** on GitHub: [`DevboiDesigns/mailweaver`](https://github.com/DevboiDesigns/mailweaver)
+- **Share feedback or ideas** via issues – real-world use cases help shape the API
+- **Tell a friend or teammate** who is tired of hand-rolling SendGrid calls
+
+Every star and suggestion genuinely helps keep this project healthy and evolving.
 
 ## License
 

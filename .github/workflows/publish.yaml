@@ -1,4 +1,4 @@
-name: Publish package to GitHub npm registry
+name: Publish mailweaver to npmjs
 on:
   release:
     types: [published]
@@ -14,8 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20.x"
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@DevboiDesigns"
+          registry-url: "https://registry.npmjs.org"
           cache: "npm"
 
       - run: npm ci
@@ -24,6 +23,6 @@ jobs:
 
       - run: npm test
 
-      - run: npm publish
+      - run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

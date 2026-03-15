@@ -20,6 +20,7 @@
   "scripts": {
     "build": "tsup",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "release": "npm run build && npm publish"
   },
   "engines": {

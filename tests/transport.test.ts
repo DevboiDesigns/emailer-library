@@ -1,5 +1,10 @@
 import { sendMail } from "../src/transport";
-import { SendGridError } from "../src/errors";
+import {
+  SendGridError,
+  TransportError,
+  TimeoutError,
+  SerializationError,
+} from "../src/errors";
 import type { MailSendBody } from "../src/transport";
 
 const mockFetch = jest.fn();
@@ -139,6 +144,38 @@ describe("sendMail", () => {
       remaining: 0,
       reset: 1392815263,
     });
+  });
+
+  it("throws TransportError when fetch fails (network error)", async () => {
+    mockFetch.mockRejectedValue(new Error("ECONNREFUSED"));
+
+    await expect(sendMail(validBody, config)).rejects.toThrow(TransportError);
+    await expect(sendMail(validBody, config)).rejects.toMatchObject({
+      message: expect.stringContaining("ECONNREFUSED"),
+    });
+  });
+
+  it("throws TimeoutError when request times out", async () => {
+    const abortError = new Error("The operation was aborted");
+    abortError.name = "AbortError";
+    mockFetch.mockRejectedValue(abortError);
+
+    await expect(
+      sendMail(validBody, { ...config, timeoutMs: 100 })
+    ).rejects.toThrow(TimeoutError);
+  });
+
+  it("throws SerializationError when body cannot be serialized", async () => {
+    const circular: Record<string, unknown> = { a: 1 };
+    circular.self = circular;
+    const bodyWithCircular = {
+      ...validBody,
+      personalizations: circular,
+    } as unknown as MailSendBody;
+
+    await expect(sendMail(bodyWithCircular, config)).rejects.toThrow(
+      SerializationError
+    );
   });
 
   it("handles non-JSON error response", async () => {

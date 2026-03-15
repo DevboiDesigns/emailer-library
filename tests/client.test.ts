@@ -1,8 +1,25 @@
 import { SendGridClient } from "../src/client";
-import { ValidationError, SendGridError } from "../src/errors";
+import {
+  ValidationError,
+  SendGridError,
+  ConfigurationError,
+  EmailerError,
+} from "../src/errors";
 import { minimalValidOptions } from "./fixtures";
+import type { Logger } from "../src/logger";
 
 const mockFetch = jest.fn();
+
+const createMockLogger = (): Logger & { calls: { level: string; message: string }[] } => {
+  const calls: { level: string; message: string }[] = [];
+  return {
+    calls,
+    debug: (msg) => { calls.push({ level: "debug", message: msg }); },
+    info: (msg) => { calls.push({ level: "info", message: msg }); },
+    warn: (msg) => { calls.push({ level: "warn", message: msg }); },
+    error: (msg) => { calls.push({ level: "error", message: msg }); },
+  };
+};
 
 beforeEach(() => {
   mockFetch.mockReset();

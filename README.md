@@ -1,11 +1,11 @@
 # Emailer Library
 
-A reusable TypeScript library for sending emails via the SendGrid v3 API. Includes input validation against SendGrid limits, full type safety, and clear error handling.
+A reusable TypeScript library for sending emails via the SendGrid v3 API. Includes input validation against SendGrid limits, full type safety, production-grade error handling, and structured logging.
 
 ## Installation
 
 ```bash
-npm install emailer-library
+npm install @devboidesigns/emailer-library
 ```
 
 **Requirements:** Node.js 18+ (uses native `fetch`)
@@ -13,7 +13,7 @@ npm install emailer-library
 ## Quick Start
 
 ```typescript
-import { SendGridClient } from "emailer-library";
+import { SendGridClient } from "@devboidesigns/emailer-library";
 
 const client = new SendGridClient({ apiKey: process.env.SENDGRID_API_KEY! });
 await client.send({
@@ -242,12 +242,42 @@ See [docs/LIMITATIONS.md](docs/LIMITATIONS.md) for details.
 ### SendGridClient
 
 ```typescript
-const client = new SendGridClient(config: { apiKey: string; baseUrl?: string });
+const client = new SendGridClient(config: {
+  apiKey: string;
+  baseUrl?: string;
+  timeoutMs?: number;
+  logger?: Logger;
+});
 ```
+
+| Config | Type | Description |
+|--------|------|-------------|
+| `apiKey` | `string` | SendGrid API key (required) |
+| `baseUrl` | `string` | Override API base URL (e.g. EU region) |
+| `timeoutMs` | `number` | Request timeout in milliseconds |
+| `logger` | `Logger` | Optional structured logger |
 
 #### send(options: SendEmailOptions): Promise<SendResponse>
 
 Sends an email. Returns `{ statusCode, headers, rateLimit? }` on success.
+
+### Error classes and codes
+
+- `ErrorCode` – Constants: `VALIDATION_ERROR`, `CONFIGURATION_ERROR`, `SENDGRID_API_ERROR`, `NETWORK_ERROR`, `TIMEOUT_ERROR`, `SERIALIZATION_ERROR`, `UNKNOWN_ERROR`
+- `EmailerError` – Base class; use `isEmailerError()` and `toJSON()`
+- `ValidationError` – Pre-send validation failures
+- `ConfigurationError` – Invalid client config
+- `SendGridError` – API errors; `isRetryable()`, `getRetryAfterMs()`
+- `TransportError` – Network failures
+- `TimeoutError` – Request timeout
+- `SerializationError` – JSON serialization failure
+
+### Logger utilities
+
+- `createConsoleLogger(options?)` – JSON logger for console
+- `noopLogger` – No-op logger (default when none provided)
+- `redactEmail(email)` – Redact email for safe logging
+- `createRequestId()` – Generate request correlation ID
 
 ### Types
 
@@ -255,6 +285,7 @@ Sends an email. Returns `{ statusCode, headers, rateLimit? }` on success.
 - `EmailAddress` – `{ email: string; name?: string }`
 - `Attachment` – `{ content: string; filename: string; type?: string; disposition?: "inline" | "attachment"; content_id?: string }`
 - `SendResponse` – `{ statusCode: number; headers: Record<string, string>; rateLimit?: RateLimitInfo }`
+- `Logger` – `{ debug, info, warn, error, child? }`
 
 ## License
 
